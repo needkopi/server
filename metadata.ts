@@ -2,8 +2,14 @@ import { Router } from './router.ts';
 import { ControllerMetadata } from './metadata/controller.ts';
 
 export class MetaData {
+  // property controller contain ?
+  //
+  //
   static controllers: {[key: string]: any} = {};
+  
+  // property mmethod contain
   static methods: any[] = [];
+  static middlewares: any[] = []
 
   static objects() {
     return {
@@ -22,6 +28,7 @@ export class MetaData {
 
     if (!this.controllers[name]) this.controllers[name] = new target();
     this.controllers[name].meta = meta;
+    //console.log(meta)
 
     this.buildRoute(name, this.controllers[name].meta);
   }
@@ -40,12 +47,25 @@ export class MetaData {
   }
 
   static addMethod(method: string, controller: string, url: string, target: Function) {
+    //const middleware: Function;
+    const middleware = this.middlewares.filter(m => m.name === controller && m.target === target).forEach(m => {
+        return  m.middleware;
+    });
     this.methods.push({
       controller,
       method,
       url,
+      middleware,
       target,
     });
+  }
+
+  static addMiddleware(middleware: Function,name: string, target: Function){
+    this.middlewares.push({
+        middleware,
+        name,
+        target,
+    })
   }
 
 }

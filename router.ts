@@ -90,6 +90,7 @@ export class Router {
     });
   }
 
+  
   get(url: string, ...handlers: Function[]) {
     this.registerRoute('GET', url, handlers);
   }
