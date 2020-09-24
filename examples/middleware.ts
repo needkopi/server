@@ -1,5 +1,5 @@
 import { Server, AppModules, Request, Response } from '../mod.ts';
-import { Controller, GET } from '../decorator.ts';
+import { Controller, GET, Middleware } from '../decorator.ts';
 
 const app: Server = new Server();
 
@@ -13,23 +13,20 @@ class IndexController {
 
 @Controller('/about')
 class AboutController {
+
   @GET()
   index(req: Request, res: Response) {
     res.send('about');
   }
 
   @GET('/:id')
-  @Middleware(Middeware.Check)
+  @Middleware(AuthMiddleware)
   show() {
   }
 }
 
-class Middleware {
-    check(next) {
-        if 1 == 1 {
-            return next()
-        }
-    }
+function AuthMiddleware(){
+    console.log("lolos uji middleware")
 }
 
 const modules: AppModules = {
